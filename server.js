@@ -40,7 +40,15 @@ io.on('connection',(socket)=>{
     })
 // for code sharing 
     socket.on(ACTIONS.CODE_CHANGE,({roomID,code})=>{
-        io.to(roomID).emit(ACTIONS.CODE_CHANGE,{code});
+        // console.log('receiving',code)
+        // io.to(roomID).emit(ACTIONS.CODE_CHANGE,{code});
+        // Due to the above what happenend is the message also come back to the original user ,so it orverrides and the test written in reverse order 
+        socket.in(roomID).emit(ACTIONS.CODE_CHANGE,{code});
+
+    })
+
+    socket.on(ACTIONS.SYNC_CODE,({socketId,code})=>{
+        io.to(socketId).emit(ACTIONS.CODE_CHANGE,{code})
     })
 
     socket.on('disconnecting',()=>{
@@ -58,7 +66,9 @@ io.on('connection',(socket)=>{
 })
 
 
-
+app.get('/',(req,res)=>{
+    res.send("Hello From Backend of Realtime-editor")
+})
 
 
 const PORT = process.env.PORT || 4000;

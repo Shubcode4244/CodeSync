@@ -51,6 +51,9 @@
 
 // export default EEditor
 
+
+
+// ------------
 import React, { useEffect, useRef } from 'react';
 import Codemirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -60,7 +63,10 @@ import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import ACTIONS from '../Actions';
 
-const Editor = ({ socketRef, roomId, onCodeChange }) => {
+
+
+// const Editor = ({ socketRef, roomId, onCodeChange }) => {
+const Editor = ({ socketRef, roomID,onCodeChange }) => {
     const editorRef = useRef(null);
     useEffect(() => {
         async function init() {
@@ -78,10 +84,12 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             editorRef.current.on('change', (instance, changes) => {
                 const { origin } = changes;
                 const code = instance.getValue();
-                onCodeChange(code);
+                // onCodeChange(code);
+                onCodeChange(code)
                 if (origin !== 'setValue') {
+                    console.log('working ',code)
                     socketRef.current.emit(ACTIONS.CODE_CHANGE, {
-                        roomId,
+                        roomID,
                         code,
                     });
                 }
